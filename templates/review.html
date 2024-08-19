@@ -1,0 +1,742 @@
+{% extends "base.html" %}
+
+{% block scripts %}
+  <script>
+    function check(value, options){
+        if (value == null){
+            return
+        }
+
+        for(i=0; i<options.length; i++){
+            options[i].checked = false;
+        }
+        switch(value){
+            case 'YES':
+                options[0].checked = true;
+                return;
+
+            case 'NO':
+                options[1].checked = true;
+                return;
+            
+            case 'NO VIDEO':
+                options[2].checked = true;
+                return;
+
+            default:
+                return;
+        }
+    }
+
+    function clear(options){
+        for(i=0; i<options.length; i++){
+            options[i].checked = false;
+        }
+    }
+
+    function fillForm(entry){
+        console.log("filling form with")
+        console.log(entry)
+
+        vofi = document.getElementsByName("VIDEO OF FORCE INCIDENT");
+        good = document.getElementsByName("GOOD");
+        bwcCom = document.getElementsByName("BWC COMMAND");
+        bwcUser = document.getElementsByName("BWC USER AT TIME OF INCIDENT");
+
+        fiSerial = document.getElementById("fiSerial");
+        fiSerial.value = entry["force_incident_serial_number"];
+
+
+        fiLink = document.getElementById("fiLink");
+        fiLink.value = entry["force_incident_link"];
+
+        late = document.getElementsByName("LATE ACTIVATION");
+        early = document.getElementsByName("EARLY DEACTIVATION");
+        shared = document.getElementsByName("SHARED WITH ADA");
+        categorized = document.getElementsByName("VIDEO CATEGORIZED AS FORCE INCIDENT");
+        triEntered = document.getElementsByName("TRI NUMBER ENTERED IN METADATA");
+        multiple = document.getElementsByName("MULTIPLE VIDEOS OF INCIDENT BY USER");
+
+        allSerial = document.getElementById("allSerial");
+        allSerial.value = entry["all_evidence_serial_numbers"];
+
+        allLink = document.getElementById("allLink");
+        allLink.value = entry["all_evidence_links"];
+        
+        entryUID = document.getElementById("entryUID");
+        entryUID.value = entry["entry_key"];
+
+        user = document.getElementById("user");
+        user.value = entry["user"];
+
+        dt = document.getElementById("dtCreated");
+        dt.value = entry["dt_created"];
+
+        triIndex = document.getElementById("interactionIndex");
+        triIndex.value = entry["tri_index"];
+
+        check(entry["video_of_force_incident"], vofi);
+        check(entry["good"], good);
+        check(entry['bwc_command'], bwcCom);
+        check(entry['bwc_user_at_time_of_incident'], bwcUser)
+        check(entry['late_activation'], late);
+        check(entry['early_deactivation'], early);
+        check(entry['shared_with_ada'], shared);
+        check(entry['video_categorized_as_force_incident'], categorized);
+        check(entry['tri_number_entered_in_metadata'], triEntered);
+        check(entry['multiple_videos_incident_by_user'], multiple)        
+        return
+    }
+
+    function clearForm(){
+        vofi = document.getElementsByName("VIDEO OF FORCE INCIDENT");
+        good = document.getElementsByName("GOOD");
+        bwcCom = document.getElementsByName("BWC COMMAND");
+        bwcUser = document.getElementsByName("BWC USER AT TIME OF INCIDENT");
+
+        fiSerial = document.getElementById("fiSerial");
+        fiSerial.value = null;
+        fiLink = document.getElementById("fiLink");
+        fiLink.value = null;
+
+        late = document.getElementsByName("LATE ACTIVATION");
+        early = document.getElementsByName("EARLY DEACTIVATION");
+        shared = document.getElementsByName("SHARED WITH ADA");
+        categorized = document.getElementsByName("VIDEO CATEGORIZED AS FORCE INCIDENT");
+        triEntered = document.getElementsByName("TRI NUMBER ENTERED IN METADATA");
+        multiple = document.getElementsByName("MULTIPLE VIDEOS OF INCIDENT BY USER");
+
+        allSerial = document.getElementById("allSerial");
+        allSerial.value = null;
+        allLink = document.getElementById("allLink");
+        allLink.value = null;
+
+        entryUID = document.getElementById("entryUID");
+        entryUID.value = null;
+
+        user = document.getElementById("user");
+        user.value = null;
+
+        dt = document.getElementById("dtCreated");
+        dt.value = null;
+
+        triIndex = document.getElementById("interactionIndex");
+        triIndex.value = null;
+
+        clear(vofi);
+        clear(good);
+        clear(bwcCom);
+        clear(bwcUser);
+        clear(late);
+        clear(early);
+        clear(shared);
+        clear(categorized);
+        clear(triEntered);
+        clear(multiple);
+        return
+    }
+
+    const searchTerms = new Map();
+    var view = new Map() 
+
+    $(document).ready(function () {
+        var table = $('#data').DataTable({
+
+            layout: {
+                topEnd: {
+                    search: {
+                        placeholder: 'Search all columns...'
+                    }
+                },
+                topStart: {
+                    div: {
+                        className: 'rangeDiv',
+                        id: 'rangeDiv',
+                        html: `
+                        <div>
+                            <div class="row">
+                                <div class="col" style="display: flex;flex-direction: row;">
+                                    <label style="text-align: center;"><b>Show Range:</b></label>
+                                </div>
+                                <div class="col" style="display: flex;flex-direction: row;">
+                                    <input type="text" id="startRange" placeholder="Start" cols="1" rows="1" class="form-control" style="width:80px;background-color: #f0f8ff; height:30px;">
+                                <div class="col" style="display: flex;flex-direction: row;">
+                                    <label style="width:70px;text-align: center;">to</label>
+                                </div>
+                                <div class="col" style="display: flex;flex-direction: row;">
+                                    <input type="text" id="endRange" placeholder="End" class="form-control" style="width:80px;background-color: #f0f8ff; height:30px;">
+                                </div>
+                            </div>
+                        </div>
+                        `
+                    }
+                },
+                bottomStart: "pageLength",
+                bottomEnd: "info",
+            },
+            order: [],
+            serverSide: true,
+            scrollY: 750,
+            deferRender: true,
+            scroller: true,
+            stateSave: true,
+            ajax: {
+                url: '/api/entries_interactions',
+                data: function (d) {
+                   d.searchTerms = JSON.stringify(Object.fromEntries(searchTerms)),
+                   d.view = JSON.stringify(Object.fromEntries(view))
+                }
+            },
+            columns: [
+                {
+                    data: null,
+                    orderable: false,
+                    searchable: false,
+                    render: function(data, type, row, meta) {
+                        return '<button type="button" class="purple-btn">Select ></button>';
+                    }
+                },
+                {data: 'tri_interaction_key', visible: false, sortable: false},
+                {data: 'tri_index', sortable: false},
+                {data: 'tri_incident_number', sortable: false},
+                {data: 'tri_interaction_number', sortable: false},
+
+                {data: 'reviewed', sortable: false},
+                {data: 'video_of_force_incident', sortable: false},
+                {data: 'good', sortable: false},
+                {data: 'bwc_command', sortable: false},
+                {data: 'bwc_user_at_time_of_incident', sortable: false},
+                {data: 'force_incident_serial_number', sortable: false},
+                {data: 'force_incident_link', sortable: false},
+                {data: 'late_activation', sortable: false},
+                {data: 'early_deactivation', sortable: false},
+                {data: 'shared_with_ada', sortable: false},
+                {data: 'video_categorized_as_force_incident', sortable: false},
+                {data: 'tri_number_entered_in_metadata', sortable: false},
+                {data: 'multiple_videos_incident_by_user', sortable: false},
+                {data: 'all_evidence_serial_numbers', sortable: false},
+                {data: 'all_evidence_links', sortable: false},
+                {data: 'user', sortable: false},
+
+                {data: 'mos_command_description', sortable: false},
+                {data: 'mos_rank_code', sortable: false},
+                {data: 'mos_full_name', sortable: false},
+                {data: 'mos_tax_number', sortable: false},
+                {data: 'occurrence_date', sortable: false},
+                {data: 'occurrence_time', sortable: false},
+                {data: 'tri_level', sortable: false},
+                {data: 'encounter_type_description', sortable: false}
+            ],
+
+            initComplete: function () {
+                this.api()
+                    .columns()
+                    .every(function () {
+                        let column = this;
+                        let title = column.footer().textContent;
+
+                        let input = document.createElement('input');
+                        input.placeholder = title;
+                        input.id = title
+                        input.className='form-control'
+                        input.value = localStorage.getItem(input.placeholder)
+                        
+                        if (column.footer().textContent != "Search:" && column.footer().textContent != "TRI Index") {
+                            column.footer().replaceChildren(input);
+
+                            if (input.value != null && input.value != ""){
+                                searchTerms.set(input.placeholder, input.value)
+                                table.ajax.reload();
+                            }
+                        }
+
+                        input.addEventListener('keyup', () => {
+                            console.log(input.value)
+                            searchTerms.set(input.placeholder, input.value)
+                            localStorage.setItem(input.placeholder, input.value);
+                            table.ajax.reload();
+                        });
+                    });
+
+                    startIndexElement = document.getElementById("startRange");
+                    startIndexElement.value = localStorage.getItem("Start")
+                    if (startIndexElement.value != null && startIndexElement.value != ""){
+                        view.set("Start", startIndexElement.value)
+                        table.ajax.reload();
+                    }
+    
+                    startIndexElement.addEventListener('keyup', () => {
+                        console.log(startIndexElement.value)
+                        view.set("Start", startIndexElement.value)
+                        localStorage.setItem("Start", startIndexElement.value);
+                        table.ajax.reload();
+                    });
+    
+                    endIndexElement = document.getElementById("endRange");
+                    endIndexElement.value = localStorage.getItem("End")
+                    if (endIndexElement.value != null && endIndexElement.value != ""){
+                        view.set("End", endIndexElement.value)
+                        table.ajax.reload();
+                    }
+    
+                    endIndexElement.addEventListener('keyup', () => {
+                        console.log(endIndexElement.value)
+                        view.set("End", endIndexElement.value)
+                        localStorage.setItem("End", endIndexElement.value);
+                        table.ajax.reload();
+                    });
+            }
+        });
+        
+        table.on('click', "tbody tr td:first-child button", (e) => {
+            e.stopPropagation(); // Prevent event from bubbling up to parent elements
+            let row = e.currentTarget.closest('tr');
+            let classList = row.classList;
+
+            if (classList.contains('selected')) {
+                classList.remove('selected');
+
+                intKeyElement = document.getElementById("intKey");
+                intKeyElement.value = null
+
+                incNumElement = document.getElementById("incNum");
+                incNumElement.value = null
+
+                intNumElement = document.getElementById("intNum");
+                intNumElement.value = null
+
+                clearForm();
+            }
+            else {
+                table.rows('.selected').nodes().each((row) => row.classList.remove('selected'));
+                classList.add('selected');
+
+                intKeyElement = document.getElementById("intKey");
+                intKeyElement.value = table.row(row).data()['tri_interaction_key']
+
+                var entries = JSON.parse('{{ entriesRowsJSON | safe }}');
+
+                for(var i=0; i<entries.length; i++){
+                    entry = entries[i]
+
+                    var entryTriKey = entry["tri_interaction_key"];
+                    if ( entryTriKey == table.row(row).data()['tri_interaction_key']){
+                        fillForm(entry)
+                        break;
+                    }
+                    else if (entryTriKey != table.row(row).data()['tri_interaction_key']){
+                        clearForm()
+                    }
+                }
+
+                incNumElement = document.getElementById("incNum");
+                incNumElement.value = table.row(row).data()['tri_incident_number'];
+
+                intNumElement = document.getElementById("intNum");
+                intNumElement.value = table.row(row).data()['tri_interaction_number'];
+            }
+        });
+
+        parent = document.getElementsByClassName("dt-search").item(0);
+        label = parent.getElementsByTagName('label').item(0)
+        label.innerHTML = "<b>Search:</b>"
+    }
+    );
+    
+  </script>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-4" style="border: 5px solid #c1c1c1; border-radius: 5px; background-color: #efefef;">
+            
+            <div class="form-container">
+                <form action="/submit_review" method="post">
+                    <div class="row border rounded" style="background-color: #dfdfdf;">
+                        <div class="col-6">
+                            <b>TRI Incident: </b><input type="text" readonly id="incNum" name="incNum" placeholder="Incident #" style="border:0; background: rgba(0,0,0,0);"><br>
+                        </div>
+
+                        <div class="col-6">
+                            <b>Interaction: </b><input type="text" readonly id="intNum" name="intNum" placeholder="Interaction #" style="border:0; background: rgba(0,0,0,0);"><br>
+                        </div>
+                    </div>
+
+                    <br>
+
+                    <div class="row border rounded">
+                        <div class="col rounded center-block text-center" style="background-color: #dfdfdf">
+                            <b>VIDEO OF FORCE INCIDENT:</b>
+                        </div>
+                        <div class="col center-block text-center">
+                            <div class="row">
+                                <div class="col-3">
+                                    <input type="radio" name="VIDEO OF FORCE INCIDENT" value="YES"> YES 
+                                </div>
+                                <div class="col-3">
+                                    <input type="radio" name="VIDEO OF FORCE INCIDENT" value="NO"> NO 
+                                </div>
+                                <div class="col-6">
+                                    <input type="radio" name="VIDEO OF FORCE INCIDENT" value="NO VIDEO"> NO VIDEO<br>
+                                </div>
+                            </div>
+                    
+                        </div>
+                    </div>
+
+                    <br>
+
+                    <div class="row border rounded">
+                        <div class="col rounded center-block text-center" style="background-color: #dfdfdf">
+                            <b>GOOD?</b>
+                        </div>
+                        <div class="col center-block text-center">
+                            <div class="row">
+                                <div class="col">
+                                    <input type="radio" name="GOOD" value="YES"> YES 
+                                </div>
+                                <div class="col">
+                                    <input type="radio" name="GOOD" value="NO"> NO<br>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <br>
+
+                    <div class="row border rounded">
+                        <div class="col rounded center-block text-center" style="background-color: #dfdfdf">
+                            <b>BWC COMMAND: </b>
+                        </div>
+                        <div class="col center-block text-center">
+                            <div class="row">
+                                <div class="col">
+                                    <input type="radio" name="BWC COMMAND" value="YES"> YES     
+                                </div>
+                                <div class="col">
+                                    <input type="radio" name="BWC COMMAND" value="NO"> NO<br>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <br>
+
+                    <div class="row border rounded">
+                        <div class="col rounded center-block text-center" style="background-color: #dfdfdf">
+                            <b>BWC USER AT TIME OF INCIDENT:</b>
+                        </div>
+                        <div class="col center-block text-center">
+                            <div class="row">
+                                <div class="col">
+                                    <input type="radio" name="BWC USER AT TIME OF INCIDENT" value="YES"> YES 
+                                </div>
+                                <div class="col">
+                                    <input type="radio" name="BWC USER AT TIME OF INCIDENT" value="NO"> NO<br>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <br>
+
+                    <div class="row border rounded">
+                        <div class="col rounded center-block text-center" style="background-color: #dfdfdf">
+                            <b>FORCE INCIDENT SERIAL NUMBER:</b>
+                        </div>
+                    </div>
+
+                    <div class="row border rounded">
+                        <div class="col rounded center-block text-center">
+                            <textarea name="fiSerial" id="fiSerial" class="form-control" placeholder="Serial #:" cols="35" rows="1"></textarea>
+                        </div>
+                        <div class="col rounded center-block text-center">
+                            <textarea name="fiLink" id="fiLink" class="form-control" placeholder="Link:" cols="35" rows="1"></textarea>
+                        </div>
+                    </div>
+                
+                    <br>
+
+                    <div class="row border rounded">
+                        <div class="col rounded center-block text-center" style="background-color: #dfdfdf">
+                            <b>LATE ACTIVATION:</b>
+                        </div>
+                        <div class="col center-block text-center">
+                            <div class="row">
+                                <div class="col-6">
+                                    <input type="radio" name="LATE ACTIVATION" value="YES"> YES
+                                </div>
+                                <div class="col-6">
+                                    <input type="radio" name="LATE ACTIVATION" value="NO"> NO<br>
+                                </div>
+                            </div>
+                    
+                        </div>
+                    </div>
+
+                    <br>
+
+                    <div class="row border rounded">
+                        <div class="col rounded center-block text-center" style="background-color: #dfdfdf">
+                            <b>EARLY DEACTIVATION:</b>
+                        </div>
+                        <div class="col center-block text-center">
+                            <div class="row">
+                                <div class="col-6">
+                                    <input type="radio" name="EARLY DEACTIVATION" value="YES"> YES 
+                                </div>
+                                <div class="col-6">
+                                    <input type="radio" name="EARLY DEACTIVATION" value="NO"> NO<br>
+                                </div>
+                            </div>
+                    
+                        </div>
+                    </div>
+            
+                    <br>
+
+                    <div class="row border rounded">
+                        <div class="col rounded center-block text-center" style="background-color: #dfdfdf">
+                            <b>SHARED WITH ADA?:</b>
+                        </div>
+                        <div class="col center-block text-center">
+                            <div class="row">
+                                <div class="col-6">
+                                    <input type="radio" name="SHARED WITH ADA" value="YES"> YES 
+                                </div>
+                                <div class="col-6">
+                                    <input type="radio" name="SHARED WITH ADA" value="NO"> NO<br>
+                                </div>
+                            </div>
+                    
+                        </div>
+                    </div>
+                    
+                    <br>
+
+                    <div class="row border rounded">
+                        <div class="col rounded center-block text-center" style="background-color: #dfdfdf">
+                            <b>VIDEO CATEGORIZED AS FORCE INCIDENT:</b>
+                        </div>
+                        <div class="col center-block text-center">
+                            <div class="row">
+                                <div class="col-6">
+                                    <input type="radio" name="VIDEO CATEGORIZED AS FORCE INCIDENT" value="YES"> YES 
+                                </div>
+                                <div class="col-6">
+                                    <input type="radio" name="VIDEO CATEGORIZED AS FORCE INCIDENT" value="NO"> NO<br>
+                                </div>
+                            </div>
+                    
+                        </div>
+                    </div>
+
+                    <br>
+
+                    <div class="row border rounded">
+                        <div class="col rounded center-block text-center" style="background-color: #dfdfdf">
+                            <b>TRI NUMBER ENTERED IN METADATA:</b>
+                        </div>
+                        <div class="col center-block text-center">
+                            <div class="row">
+                                <div class="col-6">
+                                    <input type="radio" name="TRI NUMBER ENTERED IN METADATA" value="YES"> YES 
+                                </div>
+                                <div class="col-6">
+                                    <input type="radio" name="TRI NUMBER ENTERED IN METADATA" value="NO"> NO<br><br>
+                                </div>
+                            </div>
+                    
+                        </div>
+                    </div>
+
+                    <br>
+
+                    <div class="row border rounded">
+                        <div class="col rounded center-block text-center" style="background-color: #dfdfdf">
+                            <b>MULTIPLE VIDEOS OF INCIDENT BY USER:</b>
+                        </div>
+                        <div class="col center-block text-center">
+                            <div class="row">
+                                <div class="col-6">
+                                    <input type="radio" name="MULTIPLE VIDEOS OF INCIDENT BY USER" value="YES"> YES 
+                                </div>
+                                <div class="col-6">
+                                    <input type="radio" name="MULTIPLE VIDEOS OF INCIDENT BY USER" value="NO"> NO<br><br>
+                                </div>
+                            </div>
+                    
+                        </div>
+                    </div>
+
+                    <br>
+                    
+                    <div class="row border rounded">
+                        <div class="col rounded center-block text-center" style="background-color: #dfdfdf">
+                            <b>ALL EVIDENCE SERIAL NUMBERS & LINKS:</b><br>
+                        </div>
+                    </div>
+
+                    <div class="row border rounded">
+                        <div class="col rounded center-block text-center">
+                            <textarea name="allSerial" id="allSerial" class="form-control" placeholder="Serial #:" cols="35" rows="1"></textarea>
+                        </div>
+                        <div class="col rounded center-block text-center">
+                            <textarea name="allLink" id="allLink" class="form-control" placeholder="Links:" cols="35" rows="1"></textarea>
+                        </div>
+                        <label style="color: #999">
+                            (Comma Seperated)
+                        </label>
+                    </div>
+
+                    <br>
+                    
+                    <div class="row">
+                        <div class="col rounded center-block text-center" style="height: 10%;">
+                            <input type="submit" value="Submit" class="purple-btn" onclick="if (document.getElementById('intKey').value == null || document.getElementById('intKey').value == ''){ return confirm('NO INTERACTION HAS BEEN SELECTED!');}else{return confirm('Are you sure the entry is correct?');}" style="font-weight: bold; font-size: 110%; display: block; width:100%;">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <b>Interaction UID: </b><input type="text" readonly id="intKey" name="intKey" placeholder="UID" style="border:0; background: rgba(0,0,0,0);">
+                        </div>
+                            <!-- OTHER FORM STUFF THAT DOESNT NEED TO BE SHOWN BUT BE PRESENT ON THE PAGE -->
+                            <input type="text" readonly id="dtCreated" name="dtCreated" placeholder="MM/DD/YYYY HH:MM:SS" style="border:0; display: none;">
+                            <input type="text" readonly id="interactionIndex" name="interactionIndex" placeholder="interactionIndex" style="border:0; display: none;">
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <b>Entry UID: </b><input type="text" readonly id="entryUID" name="entryUID" placeholder="UID" style="border:0; background: rgba(0,0,0,0);">
+                        </div>
+
+                        <div class="col">
+                            <b>User: </b><input type="text" readonly id="user" name="user" placeholder="User" style="border:0; background: rgba(0,0,0,0);">
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-8">
+            <div class="table-container">
+                    <div class="table-responsive">
+                        <table id="data" class="table nowrap table-striped table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>TRI Interaction Key</th>
+                                    <th>TRI Index</th>
+                                    <th>TRI Incident Number</th>
+                                    <th>TRI Interaction Number</th>
+                                    
+                                    <th>Reviewed</th>
+                                    <th>Video of Force Incident</th>
+                                    <th>Good</th>
+                                    <th>BWC Command</th>
+                                    <th>BWC User at time of incident</th>
+                                    <th>Force Incident Serial Number</th>
+                                    <th>Force Incident Link</th>
+                                    <th>Late Activation</th>
+                                    <th>Early Deactivation</th>
+                                    <th>Shared with ADA?</th>
+                                    <th>Video Categorized as Force Incident</th>
+                                    <th>TRI Number entered in Metadata</th>
+                                    <th>Multiple Videos of Incident by User</th>
+                                    <th>All Evidence Serial Numbers</th>
+                                    <th>All Evidence Links</th>
+                                    <th>User</th>
+                                    
+                                    <th>MOS Command Description</th>
+                                    <th>MOS Rank Code</th>
+                                    <th>MOS Full Name</th>
+                                    <th>MOS Tax Number</th>
+                                    <th>Occurrence Date</th>
+                                    <th>Occurrence Time</th>
+                                    <th>TRI Level</th>
+                                    <th>Encounter Type Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th>Search:</th>
+                                    <th>TRI Interaction Key</th>
+                                    <th>TRI Index</th>
+                                    <th>TRI Incident Number</th>
+                                    <th>TRI Interaction Number</th>
+
+                                    <th>Reviewed</th>
+                                    <th>Video of Force Incident</th>
+                                    <th>Good</th>
+                                    <th>BWC Command</th>
+                                    <th>BWC User at time of incident</th>
+                                    <th>Force Incident Serial Number</th>
+                                    <th>Force Incident Link</th>
+                                    <th>Late Activation</th>
+                                    <th>Early Deactivation</th>
+                                    <th>Shared with ADA?</th>
+                                    <th>Video Categorized as Force Incident</th>
+                                    <th>TRI Number entered in Metadata</th>
+                                    <th>Multiple Videos of Incident by User</th>
+                                    <th>All Evidence Serial Numbers</th>
+                                    <th>All Evidence Links</th>
+                                    <th>User</th>
+                                    
+                                    <th>MOS Command Description</th>
+                                    <th>MOS Rank Code</th>
+                                    <th>MOS Full Name</th>
+                                    <th>MOS Tax Number</th>
+                                    <th>Occurrence Date</th>
+                                    <th>Occurrence Time</th>
+                                    <th>TRI Level</th>
+                                    <th>Encounter Type Description</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block footer %}
+    <div class="container">
+      <section class="mt-5">
+        <div class="row text-center d-flex justify-content-center pt-5">
+          <div class="col-md-2">
+            <h6 class="text-uppercase font-weight-bold">
+              <a href="/" id="entry-link" class="text-danger">ENTRY</a>
+            </h6>
+          </div>
+
+          <div class="col-md-2">
+            <h6 class="text-uppercase font-weight-bold">
+              <a href="/review" class="text-white">Review</a>
+            </h6>
+          </div>
+
+          <div class="col-md-2">
+            <h6 class="text-uppercase font-weight-bold">
+              <a href="/manage" class="text-danger">Manage</a>
+            </h6>
+          </div>
+        </div>
+        <br>
+        <br>
+      </section>
+    </div>
+
+    <div
+         class="text-center p-3"
+         style="background-color: rgba(0, 0, 0, 0.2)"
+         >
+      Created by Robert Wong
+    </div>
+{% endblock %}

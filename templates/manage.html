@@ -1,0 +1,589 @@
+{% extends "base.html" %}
+
+{% block scripts %}
+<script>
+    const searchTerms = new Map();    
+
+    $(document).ready(function () {
+        var table = $('#data').DataTable({
+
+            layout: {
+                topStart: {
+                    search: {
+                        placeholder: 'Search all columns...'
+                    }
+                },
+                topEnd: "info",
+                bottomStart: "pageLength",
+                bottomEnd: "paging",
+             },
+            order: [],
+            serverSide: true,
+            scrollY: 293.5,
+            deferRender: true,
+            scroller: true,
+            stateSave: true,
+            ajax: {
+                url: '/api/interactions',
+                data: function (d) {
+                   d.searchTerms = JSON.stringify(Object.fromEntries(searchTerms))
+                }
+            },
+            columns: [
+                {
+                    data: null,
+                    orderable: false,
+                    searchable: false,
+                    render: function(data, type, row, meta) {
+                        return '<button type="button" class="blue-btn">Select ></button>';
+                    }
+                },
+                {data: 'tri_interaction_key', visible: false, sortable: false},
+                {data: 'index', sortable: false},
+                {data: 'tri_incident_number', sortable: false},
+                {data: 'tri_interaction_number', sortable: false},
+                {data: 'mos_command_description', sortable: false},
+                {data: 'mos_rank_code', sortable: false},
+                {data: 'mos_full_name', sortable: false},
+                {data: 'mos_tax_number', sortable: false},
+                {data: 'occurrence_date', sortable: false},
+                {data: 'occurrence_time', sortable: false},
+                {data: 'tri_level', sortable: false},
+                {data: 'encounter_type_description', sortable: false}
+            ],
+
+            initComplete: function () {
+                this.api()
+                    .columns()
+                    .every(function () {
+                        let column = this;
+                        let title = column.footer().textContent;
+
+                        let input = document.createElement('input');
+                        input.placeholder = title;
+                        input.id = title
+                        input.className='form-control'
+                        input.value = localStorage.getItem(input.placeholder)
+                        
+                        if (column.footer().textContent != "Search:") {
+                            column.footer().replaceChildren(input);
+
+                            if (input.value != null && input.value != ""){
+                                searchTerms.set(input.placeholder, input.value)
+                                table.ajax.reload(null, false);
+                            }
+                        }
+
+                        input.addEventListener('keyup', () => {
+                            console.log(input.value)
+                            searchTerms.set(input.placeholder, input.value)
+                            localStorage.setItem(input.placeholder, input.value);
+                            table.ajax.reload(null, false);
+                        });
+                    });
+
+                
+            }
+        });
+        
+        table.on('click', "tbody tr td:first-child button", (e) => {
+            e.stopPropagation(); // Prevent event from bubbling up to parent elements
+            let row = e.currentTarget.closest('tr');
+            let classList = row.classList;
+         
+            if (classList.contains('selected')) {
+                classList.remove('selected');
+                selectedInteraction = document.getElementById("selectedInteraction")
+                selectedInteraction.value = null
+                selectedEntry = document.getElementById("selectedEntry")
+                selectedEntry.value = null;
+                entryRow = document.getElementById(table.row(row).data()['tri_interaction_key'])
+                entryRow.classList.remove('selected')
+            }
+            else {
+                table.rows('.selected').nodes().each((row) => row.classList.remove('selected'));
+                classList.add('selected');    
+                selectedInteraction = document.getElementById("selectedInteraction")
+                selectedInteraction.value = table.row(row).data()['tri_interaction_key'];
+                selectedEntry = document.getElementById("selectedEntry")
+                
+                entryRow = document.getElementById(table.row(row).data()['tri_interaction_key'])
+                entryRow.classList.add('selected')
+                selectedEntry.value = entryRow.childNodes[20].innerHTML    
+            }
+        });
+
+        parent = document.getElementsByClassName("dt-search").item(0);
+        label = parent.getElementsByTagName('label').item(0)
+        label.innerHTML = "<b>Search:</b>"
+    }
+);
+</script>
+
+<script>
+    const searchTermsEntries = new Map();    
+
+    $(document).ready(function () {
+        var table = $('#entryTable').DataTable({
+
+            layout: {
+                topStart: {
+                    search: {
+                        placeholder: 'Search all columns...'
+                    }
+                },
+                topEnd: "info",
+                bottomStart: "pageLength",
+                bottomEnd: "paging",
+             },
+            order: [],
+            serverSide: true,
+            scrollY: 293.5,
+            deferRender: true,
+            scroller: true,
+            stateSave: true,
+            rowId: 'tri_interaction_key',
+            ajax: {
+                url: '/api/entries',
+                data: function (d) {
+                   d.searchTerms = JSON.stringify(Object.fromEntries(searchTerms))
+                }
+            },
+            columns: [
+                {
+                    data: null,
+                    orderable: false,
+                    searchable: false,
+                    render: function(data, type, row, meta) {
+                        return '<button type="button" class="blue-btn">Select ></button>';
+                    }
+                },
+                {data: 'tri_index', sortable: false},
+                {data: 'tri_interaction_key', visible: false, sortable: false},
+                {data: 'tri_incident_number', sortable: false},
+                {data: 'tri_interaction_number', sortable: false},
+
+                {data: 'reviewed', sortable: false},
+                {data: 'video_of_force_incident', sortable: false},
+                {data: 'good', sortable: false},
+                {data: 'bwc_command', sortable: false},
+                {data: 'bwc_user_at_time_of_incident', sortable: false},
+                {data: 'force_incident_serial_number', sortable: false},
+                {data: 'force_incident_link', sortable: false},
+                {data: 'late_activation', sortable: false},
+                {data: 'early_deactivation', sortable: false},
+                {data: 'shared_with_ada', sortable: false},
+                {data: 'video_categorized_as_force_incident', sortable: false},
+                {data: 'tri_number_entered_in_metadata', sortable: false},
+                {data: 'multiple_videos_incident_by_user', sortable: false},
+                {data: 'all_evidence_serial_numbers', sortable: false},
+                {data: 'all_evidence_links', sortable: false},
+                {data: 'user', sortable: false},
+                {data: 'entry_key', visible: true, sortable: false},
+            ],
+
+            initComplete: function () {
+                this.api()
+                    .columns()
+                    .every(function () {
+                        let column = this;
+                        let title = column.footer().textContent;
+
+                        let input = document.createElement('input');
+                        input.placeholder = title;
+                        input.id = title
+                        input.className='form-control'
+                        input.value = localStorage.getItem(input.placeholder)
+                        
+                        if (column.footer().textContent != "Search:") {
+                            column.footer().replaceChildren(input);
+
+                            if (input.value != null && input.value != ""){
+                                searchTermsEntries.set(input.placeholder, input.value)
+                                table.ajax.reload(null, false);
+                            }
+                        }
+
+                        input.addEventListener('keyup', () => {
+                            console.log(input.value)
+                            searchTermsEntries.set(input.placeholder, input.value)
+                            localStorage.setItem(input.placeholder, input.value);
+                            table.ajax.reload(null, false);
+                        });
+                    });
+
+                
+            }
+        });
+        
+        table.on('click', "tbody tr td:first-child button", (e) => {
+            e.stopPropagation(); // Prevent event from bubbling up to parent elements
+            let row = e.currentTarget.closest('tr');
+            let classList = row.classList;
+         
+            if (classList.contains('selected')) {
+                classList.remove('selected');
+                selectedEntry = document.getElementById("selectedEntry")
+                selectedEntry.value = null
+
+            }
+            else {
+                table.rows('.selected').nodes().each((row) => row.classList.remove('selected'));
+                classList.add('selected');    
+                selectedEntry = document.getElementById("selectedEntry")
+                selectedEntry.value = table.row(row).data()['entry_key'];
+            }
+        });
+        parent = document.getElementsByClassName("dt-search").item(1);
+        label = parent.getElementsByTagName('label').item(0)
+        label.innerHTML = "<b>Search:</b>"
+    }
+);
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-4">
+
+            <!-- Update -->
+            <div class="row">
+                <div class="raised-container" style="border: 5px solid #c1c1c1;">
+                    <div class="row border rounded">
+                        <div class="col center-block text-center" style="background-color: #dfdfdf; font-size: large;">
+                            <u><b>Update:</b></u>
+                        </div> 
+                    </div>
+                    <br>
+
+                    <!-- Import -->
+                    <div class="row">
+                        <div class="raised-container">
+                            <form action="/import" method="post" enctype="multipart/form-data">
+                                <div class="row border rounded" style="background-color:#dfdfdf">
+                                    <div class="col center-block text-center">
+                                        <b>Import New Data:</b>
+                                    </div> 
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <button type="button" class="blue-btn" onclick="document.getElementById('getFile').click();">&lt;Click to Choose File:&gt;</button>
+                                        <input type='file' name='file' id="getFile" accept=".csv, .xls, .xlsx" onchange="document.getElementById('fileSelected').value = document.getElementById('getFile').value.replace(/C:\\fakepath\\/, '');" style="display:none">
+                                        <input type="text" class="border rounded" id="fileSelected" readonly style="background-color: #f0f8ff; width: 70%; border-width:1.5px;">
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="row">
+                                    <div class="col">
+                                        <input type="submit" value="Import" class="green-btn" onclick="return confirm('WARNING: Are you sure you want to import new data?')" style="display: block; font-weight: bold; font-size: 110%; width: 100%;">
+                                    </div>
+                                </div>   
+                            </form>
+                        </div>
+                    </div>
+
+                    <br>
+
+                    <!-- Clear -->
+                    <div class="row" style="border: 0px;">
+                        <div class="raised-container">
+                            <form action="/clear" method="post">
+                                <div class="row border rounded" style="background-color:#dfdfdf">
+                                    <div class="col center-block text-center">
+                                        <b>Clear Selected Tables:</b>
+                                    </div> 
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="border rounded" style="width:fit-content; margin: 0 auto;">
+                                            <input type="checkbox" name="interactionsCheck" id="interactionsCheck" value="clearInt">
+                                            <label class="prevent-select" for="interactionsCheck" style="font-weight:bold; font-size:large;">Interactions</label>    
+                                        </div>
+                                    </div>
+
+                                    <div class="col">
+                                        <div class="border rounded" style="width:fit-content; margin: 0 auto;">
+                                            <input type="checkbox" name="entriesCheck" id="entriesCheck" value="clearEnt">
+                                            <label class="prevent-select" for="entriesCheck" style="font-weight:bold; font-size:large;">Entries</label>
+                                        </div>
+                                    </div>
+                                </div>   
+                                <div class="row">
+                                    <div class="col">
+                                        <input type="submit" value="Clear" class="red-btn" onclick="return confirm('WARNING: Are you sure you want to clear the database?')" style="display: block; font-weight: bold; font-size: 110%; width: 100%;">
+                                    </div>
+                                </div>                 
+                            </form>
+                        </div>
+                    </div>
+                    <br>
+                </div>
+            </div>
+
+            <br>
+
+            <!-- Finalize -->
+            <div class="row">
+                <div class="raised-container" style="border: 5px solid #c1c1c1;">
+                    <div class="row border rounded">
+                        <div class="col center-block text-center" style="background-color: #dfdfdf; font-size: large;">
+                            <u><b>Finalize:</b></u>
+                        </div> 
+                    </div>
+                    <br>
+
+                    <!-- Commit -->
+                    <div class="row">
+                        <div class="raised-container">
+                        <form action="/commit">
+                                <div class="row border rounded">
+                                    <div class="col rounded center-block text-center" style="background-color: #dfdfdf">
+                                        <b>Commit to Master Database:</b>
+                                    </div> 
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <input type="submit" value="Commit" class="blue-btn" onclick="return confirm('Are you sure you want to commit the data to the master database?')" style="display: block; font-weight: bold; font-size: 110%; width: 100%;">
+                                    </div>
+                                </div>       
+                        </form>
+                        </div>
+                    </div>
+
+                    <br>
+                    <!-- Export  -->
+                    <div class="row">
+                        <div class="raised-container">
+                            <form action="/export">
+                                <div class="row border rounded">
+                                    <div class="col rounded center-block text-center" style="background-color: #dfdfdf">
+                                        <b>Export to Excel file:</b>
+                                    </div> 
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <input type="submit" value="Export" class="blue-btn" onclick="return confirm('Are you sure you want to export the data to an Excel file?')" style="display: block; font-weight: bold; font-size: 110%; width: 100%;">
+                                    </div>
+                                </div>                 
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <br>
+
+            <!-- Manage -->
+            <div class="row">
+                <div class="raised-container" style="border: 5px solid #c1c1c1;">
+                    <div class="row border rounded">
+                        <div class="col center-block text-center" style="background-color: #dfdfdf; font-size: large;">
+                            <u><b>Manage:</b></u>
+                        </div> 
+                    </div>
+                    <br>
+
+                    <!-- Delete Selected -->
+                    <div class="row">
+                        <div class="raised-container">
+                            <form action="/delete" method="post">
+                                <div class="row border rounded">
+                                    <div class="col center-block text-center" style="background-color: #dfdfdf">
+                                        <b>Delete Selected Rows:</b>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <b>Selected Interaction UID: </b><input type="text" id="selectedInteraction" name="selectedInteraction" readonly placeholder="UID" style="background: rgba(0,0,0,0); border-width: 0;">
+                                        <br>
+                                        <b>Selected Entry UID: </b><input type="text" id="selectedEntry" name="selectedEntry" readonly placeholder="UID" style="background: rgba(0,0,0,0); border-width: 0;">
+                                        <input type="submit" value="Delete" class="yellow-btn" onclick="return confirm('WARNING: Are you sure you want to delete the selected rows?')" style="display: block; font-weight: bold; font-size: 110%; width: 100%;">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <br>
+                    <!-- Execute -->
+                    <div class="row">
+                        <div class="raised-container">
+                            <form action="/execute" method="post">
+                                <div class="row border rounded">
+                                    <div class="col rounded text-center center-block" style="background-color: #dfdfdf;">
+                                        <b>Execute an SQLite Command:</b>
+                                    </div>
+                                </div>
+                                <div class="row border rounded">
+                                    <div class="col rounded">
+                                        <textarea class="form-control" name="command" id="command" placeholder="Enter a SQlite command here..." cols="80" rows="4"></textarea>
+                                    </div>
+                                </div>
+                                <div class="row border rounded">
+                                    <div class="col rounded">
+                                        <input type="submit" value="Execute" class="blue-btn" onclick="return confirm('WARNING: Are you sure you want to execute a command on the database?')" style="display: block; font-weight: bold; font-size: 110%; width: 100%;">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-8">
+            <!-- Interaction Table -->
+            <div class="row">
+                <div class="table-container">
+                    <div class="table-responsive">
+                        <table id="data" class="table nowrap table-striped table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>TRI Interaction Key</th>
+                                    <th>Index</th>
+                                    <th>TRI Incident Number</th>
+                                    <th>TRI Interaction Number</th>
+                                    
+                                    <th>MOS Command Description</th>
+                                    <th>MOS Rank Code</th>
+                                    <th>MOS Full Name</th>
+                                    <th>MOS Tax Number</th>
+                                    <th>Occurrence Date</th>
+                                    <th>Occurrence Time</th>
+                                    <th>TRI Level</th>
+                                    <th>Encounter Type Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th>Search:</th>
+                                    <th>TRI Interaction Key</th>
+                                    <th>Index</th>
+                                    <th>TRI Incident Number</th>
+                                    <th>TRI Interaction Number</th>
+                                    
+                                    <th>MOS Command Description</th>
+                                    <th>MOS Rank Code</th>
+                                    <th>MOS Full Name</th>
+                                    <th>MOS Tax Number</th>
+                                    <th>Occurrence Date</th>
+                                    <th>Occurrence Time</th>
+                                    <th>TRI Level</th>
+                                    <th>Encounter Type Description</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        
+            <!-- Entries Table -->
+            <div class="row">
+                <div class="table-container">
+                    <div class="table-responsive">
+                        <table id="entryTable" class="table nowrap table-striped table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Index</th>
+                                    <th>TRI Interaction Key</th>
+                                    <th>TRI Incident Number</th>
+                                    <th>TRI Interaction Number</th>
+                                    
+                                    <th>Reviewed?</th>
+                                    <th>Video of Force Incident</th>
+                                    <th>Good?</th>
+                                    <th>BWC Command</th>
+                                    <th>BWC User at time of incident</th>
+                                    <th>Force Incident Serial Number</th>
+                                    <th>Force Incident Link</th>
+                                    <th>Late Activation</th>
+                                    <th>Early Deactivation</th>
+                                    <th>Shared with ADA?</th>
+                                    <th>Video Categorized as Force Incident</th>
+                                    <th>TRI Number entered in Metadata</th>
+                                    <th>Multiple Videos of Incident by User</th>
+                                    <th>All Evidence Serial Numbers</th>
+                                    <th>All Evidence Links</th>
+                                    <th>User</th>
+                                    <th>Entry Key</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th>Search:</th>
+                                    <th>Index</th>
+                                    <th>TRI Interaction Key</th>
+                                    <th>TRI Incident Number</th>
+                                    <th>TRI Interaction Number</th>
+
+                                    <th>Reviewed</th>
+                                    <th>Video of Force Incident</th>
+                                    <th>Good</th>
+                                    <th>BWC Command</th>
+                                    <th>BWC User at time of incident</th>
+                                    <th>Force Incident Serial Number</th>
+                                    <th>Force Incident Link</th>
+                                    <th>Late Activation</th>
+                                    <th>Early Deactivation</th>
+                                    <th>Shared with ADA</th>
+                                    <th>Video Categorized as Force Incident</th>
+                                    <th>TRI Number entered in Metadata</th>
+                                    <th>Multiple Videos of Incident by User</th>
+                                    <th>All Evidence Serial Numbers</th>
+                                    <th>All Evidence Links</th>
+                                    <th>User</th>
+                                    <th>Entry Key</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div> 
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block footer %}
+    <div class="container">
+      <section class="mt-5">
+        <div class="row text-center d-flex justify-content-center pt-5">
+          <div class="col-md-2">
+            <h6 class="text-uppercase font-weight-bold">
+              <a href="/" id="entry-link" class="text-danger">ENTRY</a>
+            </h6>
+          </div>
+
+          <div class="col-md-2">
+            <h6 class="text-uppercase font-weight-bold">
+              <a href="/review" class="text-danger">Review</a>
+            </h6>
+          </div>
+
+          <div class="col-md-2">
+            <h6 class="text-uppercase font-weight-bold">
+              <a href="/manage" class="text-white">Manage</a>
+            </h6>
+          </div>
+        </div>
+        <br>
+        <br>
+      </section>
+    </div>
+
+    <div
+         class="text-center p-3"
+         style="background-color: rgba(0, 0, 0, 0.2)"
+         >
+      Created by Robert Wong
+    </div>
+{% endblock %}
