@@ -99,8 +99,7 @@ RECAP can be packaged as a standalone executable using `pyinstaller`. A batch fi
 │   ├── favicon.ico
 │   ├── hardcut.py
 │   ├── main.css
-│   ├── manifest.json
-│   └── psd96.png
+│   └── manifest.json
 ├── templates
 │   ├── base.html
 │   ├── entry.html
