@@ -1,0 +1,32 @@
+/* Link color */
+#manageLink{
+  color: white!important;
+}
+
+/* Prevent select on a div */
+.prevent-select {
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none; /* Standard syntax */
+  }
+
+.main-header {
+  font-size: large;
+  text-decoration: underline;
+  font-weight: bold;
+}
+
+.table-label {
+  font-weight:bold;
+  font-size:large;
+}
+
+#fileSelectedButton {
+  background-color: #f0f8ff;
+  width: 70%;
+  border-width:1.5px;
+}
+
+#import-button {
+  display: block; font-weight: bold; font-size: 110%; width: 100%;
+}

@@ -80,14 +80,11 @@ RECAP can be packaged as a standalone executable using `pyinstaller`. A batch fi
 
 ```
 .
+├── LICENSE
 ├── README.md
 ├── app.py
-├── columns.txt
-├── database
-│   └── bwcDB.db
 ├── install_venv.bat
 ├── make.bat
-├── make_config.json
 ├── requirements.txt
 ├── setup.ipynb
 ├── setup.py
@@ -96,15 +93,18 @@ RECAP can be packaged as a standalone executable using `pyinstaller`. A batch fi
 │   └── sqliteObjects.py
 ├── static
 │   ├── PSDLogo.png
+│   ├── css
 │   ├── favicon.ico
-│   ├── hardcut.py
-│   ├── main.css
-│   └── manifest.json
+│   ├── make_config.json
+│   ├── manifest.json
+│   └── scripts
 ├── templates
 │   ├── base.html
 │   ├── entry.html
 │   ├── manage.html
 │   └── review.html
+├── venv
+│   └── ...
 └── venv_pwsh.bat
 ```
 

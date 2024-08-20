@@ -568,5 +568,5 @@ def execute():
     return redirect(request.referrer)
 
 if __name__ == '__main__':
-    # app.run(host='0.0.0.0', debug=True)
-    FlaskUI(app=app, server="flask", width=800, height=600).run()
+    app.run(host='0.0.0.0', debug=True)
+    # FlaskUI(app=app, server="flask", width=800, height=600).run()

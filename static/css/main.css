@@ -1,0 +1,194 @@
+html {
+    background: #1a1e21;
+}
+
+/* Form styles */
+/* Container styles */
+.form-col {
+    border: 5px solid #c1c1c1;
+    border-radius: 5px;
+    background-color: #efefef;
+}
+
+.form-label{
+    background-color: #dfdfdf;
+    margin: 0!important;
+}
+
+.raised-container {
+    background-color: #efefef;
+    border-radius: 5px;
+    border-width: 1.5px;
+}
+
+.form-field{
+    border: 0;
+    background: rgba(0, 0, 0, 0);
+}
+
+/* Text on form */
+.subtle-text {
+    color: #999;
+}
+
+/* Table styles */
+
+/* Search Bar styles */
+label[for="dt-search-0"]{
+    font-weight: bold;
+    color: black!important;
+}
+
+#dt-search-0{
+    width: 570px;
+    height: 30px;
+    background-color: #f0f8ff;
+}
+
+label[for="dt-search-1"]{
+    font-weight: bold;
+    color: black!important;
+}
+
+#dt-search-1{
+    width: 570px;
+    height: 30px;
+    background-color: #f0f8ff;
+}
+
+/* Empty Text styles */
+.dt-empty{
+    text-align: left !important;
+    padding-left: 78px !important;
+}
+
+/* Footer input styles */
+tfoot input {
+    width: 100%;
+    padding: 3px;
+    background-color: #f0f8ff!important;
+}
+
+.line {
+    display: inline-flex;
+    flex-direction: row;
+    white-space: nowrap;
+}
+
+#showRangeText{
+    text-align: left;
+    overflow: hidden;
+    white-space: nowrap;
+    padding-right: 10px;
+}
+
+#showIncompleteText{
+    text-align: left;
+    overflow: hidden;
+    white-space: nowrap;
+    padding-right: 10px;
+}
+
+.filter-input{
+    font-family: sans-serif;
+    font-size: 15px;
+    background-color: #f0f8ff !important;
+}
+
+.table-text{
+    color: black!important;
+    font-weight: bold;
+}
+
+#toText{
+    width:70px;
+    text-align: center;
+}
+
+.range-input{
+    width:80px;
+    height:30px;
+}
+
+/* Button styles */
+#select-btn{
+    text-align: center!important;
+    font-weight: normal!important;
+    font-size: 16px!important;
+}
+
+.submit-btn {
+    font-weight: bold;
+    font-size: 110%;
+    display: block;
+    width: 100%;
+}
+
+/* Buttons */
+.blue-btn {
+    background-color: #0d6efd;
+    color:#ffffff;
+    border-radius: 5px;
+    border-width: 0;
+}
+
+.blue-btn:hover {
+    background-color: #0b5ed7;
+}
+
+.green-btn {
+    background-color: #33b249;
+    color:#ffffff;
+    border-radius: 5px;
+    border-width: 0;
+}
+
+.green-btn:hover {
+    background-color: #247e34;
+}
+
+.red-btn {
+    background-color: #e13647;
+    color:#ffffff;
+    border-radius: 5px;
+    border-width: 0;
+}
+
+.red-btn:hover {
+    background-color: #bb2d3b;
+}
+
+.gray-btn {
+    background-color: #dfdfdf;
+    color:#000000;
+    border-radius: 5px;
+    border-width: 1.5px;
+    border-color: #ccc;
+    border-style: solid;
+}
+
+.gray-btn:hover {
+    background-color: #dddddd;
+}
+
+.purple-btn {
+    background-color: #8728d7;
+    color:#ffffff;
+    border-radius: 5px;
+    border-width: 0;
+}
+
+.purple-btn:hover {
+    background-color: #8728d7;
+}
+
+.yellow-btn {
+    background-color: #ffbd03;
+    color:#ffffff;
+    border-radius: 5px;
+    border-width: 0;  
+}
+
+.yellow-btn:hover {
+    background-color: #cc9702;
+}
