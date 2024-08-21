@@ -33,9 +33,15 @@ html {
 
 /* Table styles */
 
+/* Making column search fit */
+table.dataTable > thead > tr > th:not(.sorting_disabled),
+table.dataTable > thead > tr > td:not(.sorting_disabled) {
+  padding-right: 30px;
+}
+
 /* Search Bar styles */
 label[for="dt-search-0"]{
-    font-weight: bold;
+    font-weight: bold !important;
     color: black!important;
 }
 
@@ -46,8 +52,13 @@ label[for="dt-search-0"]{
 }
 
 label[for="dt-search-1"]{
-    font-weight: bold;
+    font-weight: bold !important;
     color: black!important;
+    text-align:left!important;
+}
+
+div.dt-container div.dt-search{
+    text-align: left !important;
 }
 
 #dt-search-1{
@@ -122,6 +133,21 @@ tfoot input {
     font-size: 110%;
     display: block;
     width: 100%;
+}
+
+/* Flash message */
+.flash-message {
+    position: fixed;
+    top: 20px;
+    width: 30vw;
+    /* margin-left: 29px; */
+    margin-left: 1.6%;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.flash-message.show {
+    opacity: 1;
 }
 
 /* Buttons */

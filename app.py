@@ -1,5 +1,5 @@
 # Imports
-from flask import Flask, request, render_template, redirect, make_response
+from flask import Flask, request, render_template, redirect, make_response, flash
 from flaskwebgui import FlaskUI
 
 import pandas as pd
@@ -22,6 +22,7 @@ if getattr(sys, 'frozen', False): # Closes the splash screen when used with py i
     pyi_splash.close()
 
 app = Flask(__name__)
+app.secret_key = 'c3lpeIem4bbxTIOarxP_JA'
 
 db = sqlO.SQLiteDB('database/bwcDB.db') # Connects to the database
 
@@ -410,6 +411,7 @@ def submit():
             if not (all((v == None or v == '') for v in formInput)):
                 submit_entry(entries, entry)
                 interactions.update( {'completed' : 'YES'}, f'tri_interaction_key = {currentTri}' )
+                flash('Success! Submission Recieved.', 'success') 
 
     return redirect(request.referrer)
 
@@ -457,6 +459,7 @@ def submit_review():
         # The form input so it can check the info past the key
         if not (all((v == None or v == '') for v in formInput)) and entry['tri_interaction_key'] != '':
             submit_entry(entries, entry)
+            flash('Success! Submission Reviewed.', 'success') 
 
     return redirect(request.referrer)
 
@@ -567,6 +570,10 @@ def execute():
 
     return redirect(request.referrer)
 
+@app.route('/howto')
+def howtouse():
+    return render_template("howto.html")
+
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug=True)
-    # FlaskUI(app=app, server="flask", width=800, height=600).run()
+    # app.run(host='0.0.0.0', debug=True)
+    FlaskUI(app=app, server="flask", width=800, height=600).run()

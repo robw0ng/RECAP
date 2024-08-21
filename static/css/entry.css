@@ -2,3 +2,7 @@
 #entryLink{
     color: white!important;
 }
+
+.d-md-flex.justify-content-between.align-items-center.dt-layout-start.col-md-auto.me-auto{
+    width: 100vw;
+}

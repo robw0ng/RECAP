@@ -123,19 +123,15 @@ $(document).ready(function () {
     var table = $('#data').DataTable({
 
         layout: {
-            topEnd: {
-                search: {
-                    placeholder: 'Search all columns...'
-                }
-            },
+            topEnd: {},
             topStart: {
                 div: {
                     className: 'rangeDiv',
                     id: 'rangeDiv',
-                    html: `
-                    <div>
+                    html:
+                    `
                         <div class="row">
-                            <div class="line col">
+                            <div class="line col-1">
                                 <div class="line col" style="padding-top:2px;">
                                     <label class="table-text" id="showRangeText">Show Range:</label>
                                 </div>
@@ -148,14 +144,18 @@ $(document).ready(function () {
                                     <input type="text" class="range-input filter-input form-control border rounded" id="endRange" placeholder="End">
                                 </div>
                             </div>
-                            <div class="line col" style="padding-left: 40px;">
+                        </div>
+
+                        <div class="row">
+                            <div class="line col">
                                 <input type="checkbox" name="incompletedCheck" id="incompletedCheck" value="incomplete">
                                 <label class="table-text prevent-select" for="incompletedCheck" style="padding-left: 5px; padding-top:2px;">Only Show Incomplete</label>    
                             </div>
-                            
                         </div>
-                    </div>
                     `
+                },
+                search: {
+                    placeholder: 'Search all columns...'
                 }
             },
             bottomStart: "pageLength",
@@ -300,6 +300,7 @@ $(document).ready(function () {
             classList.add('selected');
 
             intKeyElement = document.getElementById("intKey");
+            console.log(table.row(row))
             intKeyElement.value = table.row(row).data()['tri_interaction_key']
 
             for(var i=0; i<entries.length; i++){
@@ -325,9 +326,5 @@ $(document).ready(function () {
             interactionIndex.value = table.row(row).data()['index'];
         }
     });
-
-    parent = document.getElementsByClassName("dt-search").item(0);
-    label = parent.getElementsByTagName('label').item(0)
-    label.innerHTML = "<b>Search:</b>"
 }
 );

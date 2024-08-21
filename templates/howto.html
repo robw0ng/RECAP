@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/howto.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid howto-container">
+    <div class="howto-title">
+        How to Use RECAP
+    </div>
+    <div class="form-col howto-step">
+        <h2>Welcome</h2>
+        <p>Welcome to RECAP. This guide will walk you through the process of selecting a TRI, filling out the necessary form fields, and submitting the information for processing.</p>
+    </div>
+
+    <div class="form-col howto-step">
+        <h2>Step 1: Selecting a TRI</h2>
+        <ul>
+            <li><strong>Locate the Table on the Right:</strong> On the right side of the interface, you will find a table listing all available TRIs. Each row represents a separate TRI record.</li>
+            <li><strong>Search and Filter:</strong> Use the search box above the table to find a specific TRI by entering relevant keywords. You can also filter the table using the range fields or the "Only Show Incomplete" checkbox.</li>
+            <li><strong>Select a TRI:</strong>
+                <ul>
+                    <li>To select a TRI, click the "Select" button located in the first column of the row corresponding to the TRI you want to edit.</li>
+                    <li>Upon selection, the TRI's details will populate the form fields on the left side of the interface.</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="form-col howto-step">
+        <h2>Step 2: Filling Out the Form</h2>
+        <ul>
+            <li><strong>Review the Pre-Filled Fields:</strong> Once you've selected a TRI, the associated fields in the form on the left side will automatically be filled with existing data (if present). </li>
+            <li><strong>Update the Information:</strong>
+                <ul>
+                    <li><strong>Checkboxes:</strong> For each field that requires a "YES," "NO," or similar response, select the appropriate option by clicking on the corresponding radio button.</li>
+                    <li><strong>Text Fields:</strong> Fill/update any text fields such as the "Force Incident Serial Number" or "All Evidence Serial Numbers" as necessary.</li>
+                </ul>
+            </li>
+            <li><strong>Double-Check Your Entries:</strong> Ensure that all fields are filled out correctly and completely before proceeding to the next step.</li>
+        </ul>
+    </div>
+
+    <div class="form-col howto-step">
+        <h2>Step 3: Submitting the TRI</h2>
+        <ul>
+            <li><strong>Submit the Form:</strong> After filling out the form, click the blue "Submit" button at the bottom of the form section. This action will submit the TRI information for further processing.</li>
+            <li><strong>Confirmation:</strong> If all required fields are correctly filled out, the form will be submitted, and a confirmation message will appear.</li>
+            <li><strong>Clear the Form:</strong> After submission, the form fields will be cleared, allowing you to select another TRI and repeat the process if necessary.</li>
+        </ul>
+    </div>
+
+    <div class="form-col howto-note">
+        By following these steps, you should be able to efficiently manage and submit TRI information using this interface. If you encounter any issues or have questions, please refer to this guide or contact Dan.
+    </div>
+</div>
+{% endblock %}

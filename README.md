@@ -92,6 +92,7 @@ RECAP can be packaged as a standalone executable using `pyinstaller`. A batch fi
 │   ├── manage.py
 │   └── sqliteObjects.py
 ├── static
+│   ├── DataTables
 │   ├── PSDLogo.png
 │   ├── css
 │   ├── favicon.ico
@@ -101,6 +102,7 @@ RECAP can be packaged as a standalone executable using `pyinstaller`. A batch fi
 ├── templates
 │   ├── base.html
 │   ├── entry.html
+│   ├── howto.html
 │   ├── manage.html
 │   └── review.html
 ├── venv

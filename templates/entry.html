@@ -10,9 +10,20 @@
 </script>
 
 <script src="{{ url_for('static', filename='scripts/entry.js') }}"></script>
+
 {% endblock %}
 
 {% block content %}
+
+<!-- Flashed Message Display -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <div class="flash-message alert alert-{{ messages[0][0] }} show" role="alert">
+            {{ messages[0][1] }}
+        </div>
+    {% endif %}
+{% endwith %}
+
 <div class="container-fluid">
     <div class="row">
         <div class="form-col col-4">
@@ -107,7 +118,7 @@
 
                     <div class="row border rounded">
                         <div class="form-label col rounded center-block text-center">
-                            <b>FORCE INCIDENT SERIAL NUMBER:</b>
+                            <b>FORCE INCIDENT SERIAL NUMBER & LINKS:</b>
                         </div>
                     </div>
 

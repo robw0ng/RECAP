@@ -139,34 +139,31 @@ $(document).ready(function () {
     var table = $('#data').DataTable({
 
         layout: {
-            topEnd: {
-                search: {
-                    placeholder: 'Search all columns...'
-                }
-            },
+            topEnd: {},
             topStart: {
                 div: {
                     className: 'rangeDiv',
                     id: 'rangeDiv',
                     html: `
-                    <div>
-                        <div class="row">
+                    <div class="row">
+                        <div class="line col">
+                            <div class="line col" style="padding-top:2px;">
+                                <label class="table-text" id="showRangeText">Show Range:</label>
+                            </div>
                             <div class="line col">
-                                <div class="line col" style="padding-top:2px;">
-                                    <label class="table-text" id="showRangeText">Show Range:</label>
-                                </div>
-                                <div class="line col">
-                                    <input type="text" class="range-input filter-input form-control border rounded" id="startRange" placeholder="Start">
-                                <div class="line col" style="padding-top:2px;">
-                                    <label class="table-text" id="toText">to</label>
-                                </div>
-                                <div class="line col">
-                                    <input type="text" class="range-input filter-input form-control border rounded" id="endRange" placeholder="End">
-                                </div>
+                                <input type="text" class="range-input filter-input form-control border rounded" id="startRange" placeholder="Start">
+                            <div class="line col" style="padding-top:2px;">
+                                <label class="table-text" id="toText">to</label>
+                            </div>
+                            <div class="line col">
+                                <input type="text" class="range-input filter-input form-control border rounded" id="endRange" placeholder="End">
                             </div>
                         </div>
                     </div>
                     `
+                },
+                search: {
+                    placeholder: 'Search all columns...'
                 }
             },
             bottomStart: "pageLength",
@@ -332,9 +329,5 @@ $(document).ready(function () {
             intNumElement.value = table.row(row).data()['tri_interaction_number'];
         }
     });
-
-    parent = document.getElementsByClassName("dt-search").item(0);
-    label = parent.getElementsByTagName('label').item(0)
-    label.innerHTML = "<b>Search:</b>"
 }
 );
