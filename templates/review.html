@@ -46,16 +46,19 @@
                         <div class="col center-block text-center">
                             <div class="row">
                                 <div class="col-3">
-                                    <input type="radio" name="VIDEO OF FORCE INCIDENT" value="YES"> YES 
+                                    <input type="radio" name="VIDEO OF FORCE INCIDENT" id="vofiYes" value="YES">
+                                    <label class="prevent-select" for="vofiYes">YES</label>
                                 </div>
                                 <div class="col-3">
-                                    <input type="radio" name="VIDEO OF FORCE INCIDENT" value="NO"> NO 
+                                    <input type="radio" name="VIDEO OF FORCE INCIDENT" id="vofiNo" value="NO"> 
+                                    <label class="prevent-select" for="vofiNo">NO</label>
                                 </div>
                                 <div class="col-6">
-                                    <input type="radio" name="VIDEO OF FORCE INCIDENT" value="NO VIDEO"> NO VIDEO<br>
+                                    <input type="radio" name="VIDEO OF FORCE INCIDENT" id="vofiNV" value="NO VIDEO">
+                                    <label class="prevent-select" for="vofiNV">NO VIDEO</label>
+                                    <br>
                                 </div>
                             </div>
-                    
                         </div>
                     </div>
 
@@ -68,15 +71,18 @@
                         <div class="col center-block text-center">
                             <div class="row">
                                 <div class="col">
-                                    <input type="radio" name="GOOD" value="YES"> YES 
+                                    <input type="radio" name="GOOD" id="goodYes" value="YES">
+                                    <label class="prevent-select" for="goodYes">YES</label> 
                                 </div>
                                 <div class="col">
-                                    <input type="radio" name="GOOD" value="NO"> NO<br>
+                                    <input type="radio" name="GOOD" id="goodNo" value="NO">
+                                    <label class="prevent-select" for="goodNo">NO</label> 
+                                    <br>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    
+
                     <br>
 
                     <div class="row border rounded">
@@ -86,15 +92,18 @@
                         <div class="col center-block text-center">
                             <div class="row">
                                 <div class="col">
-                                    <input type="radio" name="BWC COMMAND" value="YES"> YES     
+                                    <input type="radio" name="BWC COMMAND" id="bwcComYes" value="YES">
+                                    <label class="prevent-select" for="bwcComYes">YES</label> 
                                 </div>
                                 <div class="col">
-                                    <input type="radio" name="BWC COMMAND" value="NO"> NO<br>
+                                    <input type="radio" name="BWC COMMAND" id="bwcComNo" value="NO">
+                                    <label class="prevent-select" for="bwcComNo">NO</label> 
+                                    <br>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    
+
                     <br>
 
                     <div class="row border rounded">
@@ -104,10 +113,13 @@
                         <div class="col center-block text-center">
                             <div class="row">
                                 <div class="col">
-                                    <input type="radio" name="BWC USER AT TIME OF INCIDENT" value="YES"> YES 
+                                    <input type="radio" name="BWC USER AT TIME OF INCIDENT" id="bwcUserYes" value="YES"> 
+                                    <label class="prevent-select" for="bwcUserYes">YES</label> 
                                 </div>
                                 <div class="col">
-                                    <input type="radio" name="BWC USER AT TIME OF INCIDENT" value="NO"> NO<br>
+                                    <input type="radio" name="BWC USER AT TIME OF INCIDENT" id="bwcUserNo" value="NO">
+                                    <label class="prevent-select" for="bwcUserNo">NO</label>
+                                    <br>
                                 </div>
                             </div>
                         </div>
@@ -129,7 +141,7 @@
                             <textarea name="fiLink" id="fiLink" class="form-control" placeholder="Link:" cols="35" rows="1"></textarea>
                         </div>
                     </div>
-                
+
                     <br>
 
                     <div class="row border rounded">
@@ -139,13 +151,15 @@
                         <div class="col center-block text-center">
                             <div class="row">
                                 <div class="col-6">
-                                    <input type="radio" name="LATE ACTIVATION" value="YES"> YES
+                                    <input type="radio" name="LATE ACTIVATION" id="lateYes" value="YES">
+                                    <label class="prevent-select" for="lateYes">YES</label> 
                                 </div>
                                 <div class="col-6">
-                                    <input type="radio" name="LATE ACTIVATION" value="NO"> NO<br>
+                                    <input type="radio" name="LATE ACTIVATION" id="lateNo" value="NO">
+                                    <label class="prevent-select" for="lateNo">NO</label> 
+                                    <br>
                                 </div>
                             </div>
-                    
                         </div>
                     </div>
 
@@ -158,16 +172,18 @@
                         <div class="col center-block text-center">
                             <div class="row">
                                 <div class="col-6">
-                                    <input type="radio" name="EARLY DEACTIVATION" value="YES"> YES 
+                                    <input type="radio" name="EARLY DEACTIVATION" id="earlyYes" value="YES"> 
+                                    <label class="prevent-select" for="earlyYes">YES</label> 
                                 </div>
                                 <div class="col-6">
-                                    <input type="radio" name="EARLY DEACTIVATION" value="NO"> NO<br>
+                                    <input type="radio" name="EARLY DEACTIVATION" id="earlyNo" value="NO">
+                                    <label class="prevent-select" for="earlyNo">NO</label> 
+                                    <br>
                                 </div>
                             </div>
-                    
                         </div>
                     </div>
-            
+
                     <br>
 
                     <div class="row border rounded">
@@ -177,16 +193,18 @@
                         <div class="col center-block text-center">
                             <div class="row">
                                 <div class="col-6">
-                                    <input type="radio" name="SHARED WITH ADA" value="YES"> YES 
+                                    <input type="radio" name="SHARED WITH ADA" id="sharedYes" value="YES"> 
+                                    <label class="prevent-select" for="sharedYes">YES</label> 
                                 </div>
                                 <div class="col-6">
-                                    <input type="radio" name="SHARED WITH ADA" value="NO"> NO<br>
+                                    <input type="radio" name="SHARED WITH ADA" id="sharedNo" value="NO">
+                                    <label class="prevent-select" for="sharedNo">NO</label> 
+                                    <br>
                                 </div>
                             </div>
-                    
                         </div>
                     </div>
-                    
+
                     <br>
 
                     <div class="row border rounded">
@@ -196,13 +214,15 @@
                         <div class="col center-block text-center">
                             <div class="row">
                                 <div class="col-6">
-                                    <input type="radio" name="VIDEO CATEGORIZED AS FORCE INCIDENT" value="YES"> YES 
+                                    <input type="radio" name="VIDEO CATEGORIZED AS FORCE INCIDENT" id="catYes" value="YES"> 
+                                    <label class="prevent-select" for="catYes">YES</label> 
                                 </div>
                                 <div class="col-6">
-                                    <input type="radio" name="VIDEO CATEGORIZED AS FORCE INCIDENT" value="NO"> NO<br>
+                                    <input type="radio" name="VIDEO CATEGORIZED AS FORCE INCIDENT" id="catNo" value="NO">
+                                    <label class="prevent-select" for="catNo">NO</label> 
+                                    <br>
                                 </div>
                             </div>
-                    
                         </div>
                     </div>
 
@@ -215,13 +235,16 @@
                         <div class="col center-block text-center">
                             <div class="row">
                                 <div class="col-6">
-                                    <input type="radio" name="TRI NUMBER ENTERED IN METADATA" value="YES"> YES 
+                                    <input type="radio" name="TRI NUMBER ENTERED IN METADATA" id="enteredYes" value="YES"> 
+                                    <label class="prevent-select" for="enteredYes">YES</label> 
                                 </div>
                                 <div class="col-6">
-                                    <input type="radio" name="TRI NUMBER ENTERED IN METADATA" value="NO"> NO<br><br>
+                                    <input type="radio" name="TRI NUMBER ENTERED IN METADATA" id="enteredNo" value="NO">
+                                    <label class="prevent-select" for="enteredNo">NO</label> 
+                                    <br>
+                                    <br>
                                 </div>
                             </div>
-                    
                         </div>
                     </div>
 
@@ -234,13 +257,16 @@
                         <div class="col center-block text-center">
                             <div class="row">
                                 <div class="col-6">
-                                    <input type="radio" name="MULTIPLE VIDEOS OF INCIDENT BY USER" value="YES"> YES 
+                                    <input type="radio" name="MULTIPLE VIDEOS OF INCIDENT BY USER" id="multipleYes" value="YES">
+                                    <label class="prevent-select" for="multipleYes">YES</label> 
                                 </div>
                                 <div class="col-6">
-                                    <input type="radio" name="MULTIPLE VIDEOS OF INCIDENT BY USER" value="NO"> NO<br><br>
+                                    <input type="radio" name="MULTIPLE VIDEOS OF INCIDENT BY USER" id="multipleNo" value="NO">
+                                    <label class="prevent-select" for="multipleNo">NO</label> 
+                                    <br>
+                                    <br>
                                 </div>
                             </div>
-                    
                         </div>
                     </div>
 

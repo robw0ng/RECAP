@@ -3,13 +3,6 @@
   color: white!important;
 }
 
-/* Prevent select on a div */
-.prevent-select {
-    -webkit-user-select: none; /* Safari */
-    -ms-user-select: none; /* IE 10 and IE 11 */
-    user-select: none; /* Standard syntax */
-  }
-
 .main-header {
   font-size: large;
   text-decoration: underline;

@@ -9,6 +9,15 @@
 {% endblock %}
 
 {% block content %}
+<!-- Flashed Message Display -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <div class="flash-message alert alert-{{ messages[0][0] }} show" role="alert">
+            {{ messages[0][1] }}
+        </div>
+    {% endif %}
+{% endwith %}
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-4">

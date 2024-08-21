@@ -134,6 +134,7 @@ function clearForm(){
 
 const searchTerms = new Map();
 var view = new Map() 
+var unreviewed = false;
 
 $(document).ready(function () {
     var table = $('#data').DataTable({
@@ -145,21 +146,28 @@ $(document).ready(function () {
                     className: 'rangeDiv',
                     id: 'rangeDiv',
                     html: `
-                    <div class="row">
-                        <div class="line col">
-                            <div class="line col" style="padding-top:2px;">
-                                <label class="table-text" id="showRangeText">Show Range:</label>
-                            </div>
-                            <div class="line col">
-                                <input type="text" class="range-input filter-input form-control border rounded" id="startRange" placeholder="Start">
-                            <div class="line col" style="padding-top:2px;">
-                                <label class="table-text" id="toText">to</label>
-                            </div>
-                            <div class="line col">
-                                <input type="text" class="range-input filter-input form-control border rounded" id="endRange" placeholder="End">
+                        <div class="row">
+                            <div class="line col-1">
+                                <div class="line col" style="padding-top:2px;">
+                                    <label class="table-text" id="showRangeText">Show Range:</label>
+                                </div>
+                                <div class="line col">
+                                    <input type="text" class="range-input filter-input form-control border rounded" id="startRange" placeholder="Start">
+                                <div class="line col" style="padding-top:2px;">
+                                    <label class="table-text" id="toText">to</label>
+                                </div>
+                                <div class="line col">
+                                    <input type="text" class="range-input filter-input form-control border rounded" id="endRange" placeholder="End">
+                                </div>
                             </div>
                         </div>
-                    </div>
+
+                        <div class="row">
+                            <div class="line col">
+                                <input type="checkbox" name="unrevieweddCheck" id="unrevieweddCheck" value="unreviewed">
+                                <label class="table-text prevent-select" for="unrevieweddCheck" style="padding-left: 5px; padding-top:2px;">Only Show Entries Pending Rreview</label>    
+                            </div>
+                        </div>
                     `
                 },
                 search: {
@@ -180,6 +188,7 @@ $(document).ready(function () {
             data: function (d) {
                d.searchTerms = JSON.stringify(Object.fromEntries(searchTerms)),
                d.view = JSON.stringify(Object.fromEntries(view))
+               d.unreviewed = unreviewed
             }
         },
         columns: [
@@ -280,6 +289,21 @@ $(document).ready(function () {
                     localStorage.setItem("End", endIndexElement.value);
                     table.ajax.reload();
                 });
+
+                unreviewedElement = document.getElementById("unrevieweddCheck");
+                unreviewedState = JSON.parse(localStorage.getItem('unreviewed'));
+                if (unreviewedState == true){
+                    unreviewedElement.checked = unreviewedState
+                    unreviewed = unreviewedState
+                    table.ajax.reload();
+                }
+    
+                unreviewedElement.addEventListener('change', () => {
+                    unreviewed = unreviewedElement.checked;
+                    localStorage.setItem('unreviewed', unreviewed)
+                    table.ajax.reload();
+                });
+
         }
     });
     

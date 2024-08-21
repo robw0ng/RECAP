@@ -249,6 +249,9 @@ def entriesInteractionsData():
     # Gets the range to show
     viewRange = request.args.get('view')
 
+    # Get variable to show only incompleted entries
+    unreviewed = request.args.get('unreviewed')
+
     # The range is initially the length of the entire table
     iRange = [1,len(rowdictList)]
 
@@ -276,6 +279,12 @@ def entriesInteractionsData():
         if colSearchDict:
             for item in colSearchDict:
                 rowdictList = [row for row in rowdictList if colSearchDict[item].lower() in str(row[to_snake_case(item)]).lower()]
+
+    # If unreviewed only is checked, display entries that have not been submitted yet
+    if unreviewed:
+        unreviewedLoaded = json.loads(unreviewed)
+        if unreviewedLoaded == True:
+            rowdictList = [row for row in rowdictList if 'NO' in row['reviewed']]
 
     # The amount of rows filtered from the total
     total_filtered = len(rowdictList)
@@ -513,6 +522,7 @@ def commit():
     # Copy tables to the master tables
     entries.copyTo(entriesMASTER)
     interactions.copyTo(interactionMASTER)
+    flash('Success! Committed to the master database.', 'success') 
     return redirect(request.referrer)
 
 # Export the tables to an excel sheet

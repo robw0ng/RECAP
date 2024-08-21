@@ -2,6 +2,13 @@ html {
     background: #1a1e21;
 }
 
+/* Prevent select on a div */
+.prevent-select {
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none; /* Standard syntax */
+  }
+
 /* Form styles */
 /* Container styles */
 .form-col {
