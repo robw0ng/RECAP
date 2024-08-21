@@ -374,6 +374,7 @@ def index():
 
     return render_template(
                             'entry.html', 
+                            #javascript name = python name
                             entriesRowsJSON = entriesRowsJSON
                            )
 
